@@ -78,14 +78,13 @@
         <path d="M12 1C8.676 1 6 3.676 6 7v1H4v14h16V8h-2V7c0-3.324-2.676-6-6-6zm0 2c2.276 0 4 1.724 4 4v1H8V7c0-2.276 1.724-4 4-4zm0 9a2 2 0 1 1 0 4 2 2 0 0 1 0-4z"/>
       </svg>
     </div>
-    <h1>Reset your password</h1>
-    <p>Tap the button below to open Matcha and set a new password for your account.</p>
-    <a class="btn" id="deeplink">Open Matcha</a>
-    <p class="note">If the app doesn't open, make sure Matcha is installed on your device.</p>
+    <h1 id="title">Opening Matcha...</h1>
+    <p id="subtitle">Taking you to the password reset screen.</p>
+    <a class="btn" id="deeplink" style="display:none">Open Matcha</a>
+    <p class="note" id="note" style="display:none">If the app doesn't open, make sure Matcha is installed on your device.</p>
   </div>
 
   <script>
-    // Read token and email from URL params
     const params = new URLSearchParams(window.location.search);
     const token = params.get('token') || '';
     const email = params.get('email') || '';
@@ -94,10 +93,16 @@
     const btn = document.getElementById('deeplink');
     btn.href = deepLink;
 
-    // Auto-redirect after short delay
+    // Auto-redirect
+    window.location.href = deepLink;
+
+    // If still on page after 1.5s, the redirect didn't work — show the button
     setTimeout(() => {
-      window.location.href = deepLink;
-    }, 800);
+      document.getElementById('title').textContent = 'Redirect failed';
+      document.getElementById('subtitle').textContent = 'Tap the button below to open Matcha.';
+      btn.style.display = 'block';
+      document.getElementById('note').style.display = 'block';
+    }, 1500);
   </script>
 </body>
 </html>
